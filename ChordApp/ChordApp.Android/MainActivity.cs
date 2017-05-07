@@ -12,6 +12,7 @@ namespace ChordApp.Droid
     [Activity(Label = "ChordApp", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        public static int WidthDp, HeightDp;
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -20,8 +21,8 @@ namespace ChordApp.Droid
             base.OnCreate(bundle);
 
             var metrics = Resources.DisplayMetrics;
-            int width = convertPxToDp(metrics.WidthPixels);
-            int height = convertPxToDp(metrics.HeightPixels);
+            WidthDp = convertPxToDp(metrics.WidthPixels);
+            HeightDp = convertPxToDp(metrics.HeightPixels);
             
             //for touch, play with later
             /*GestureDetector.IOnGestureListener listener;
@@ -37,7 +38,7 @@ namespace ChordApp.Droid
 
         private int convertPxToDp(float pixelVal)
         {
-            return (int)(pixelVal / Resources.DisplayMetrics.Density);
+            return (int)(pixelVal);///Resources.DisplayMetrics.Density);
         }
     }
 }

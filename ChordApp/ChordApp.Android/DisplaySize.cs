@@ -7,10 +7,14 @@ namespace ChordApp.Droid
 {
     class DisplaySize : IDisplaySize
     {
-        public int getDisplayPixels()
+        public int getDisplayPixelWidth()
+        {            
+            return MainActivity.WidthDp;
+        }
+
+        public int getDisplayPixelHeight()
         {
-           
-            return 3;
+            return  MainActivity.HeightDp;
         }
 
     }

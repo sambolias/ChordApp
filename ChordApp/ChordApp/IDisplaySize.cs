@@ -8,6 +8,7 @@ namespace ChordApp
 {
     public interface IDisplaySize
     {
-        int getDisplayPixels();
+        int getDisplayPixelWidth();
+        int getDisplayPixelHeight();
     }
 }

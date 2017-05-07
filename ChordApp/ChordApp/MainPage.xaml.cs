@@ -45,16 +45,21 @@ namespace ChordApp
             double imgHt = 238;
             double scale = ScreenHeight / imgHt;
             double move = ScreenHeight / 3;
-            if (Device.RuntimePlatform == "Android")
-            {
-                if(ScreenHeight > ScreenWidth)
-                {
-                    scale *= 2;
-                }
-                else scale *= 5;
+            scale *= DependencyService.Get<IDisplaySize>().getDisplayPixelHeight()/ScreenHeight;
+            move = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight() / 3;
+        //    move = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight() / 3;
+        //  move *= DependencyService.Get<IDisplaySize>().getDisplayPixelHeight(ScreenHeight);
 
-                move = ScreenHeight / 2;
-            }
+            /*   if (Device.RuntimePlatform == "Android")
+               {
+                   if(ScreenHeight > ScreenWidth)
+                   {
+                       scale *= 2;
+                   }
+                   else scale *= 5;
+
+                   move = ScreenHeight / 2;
+               }*/
             img.Scale = scale;
             img.TranslationY = move;
             
