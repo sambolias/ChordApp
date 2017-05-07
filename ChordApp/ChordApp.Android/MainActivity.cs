@@ -19,8 +19,25 @@ namespace ChordApp.Droid
 
             base.OnCreate(bundle);
 
+            var metrics = Resources.DisplayMetrics;
+            int width = convertPxToDp(metrics.WidthPixels);
+            int height = convertPxToDp(metrics.HeightPixels);
+            
+            //for touch, play with later
+            /*GestureDetector.IOnGestureListener listener;
+            MotionEvent e1;
+            e1.Action = MotionEventActions.Scroll;
+            
+            listener.OnScroll(e1, e1, 2, 3);
+            GestureDetector touch = new GestureDetector(listener);*/
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
+        }
+
+        private int convertPxToDp(float pixelVal)
+        {
+            return (int)(pixelVal / Resources.DisplayMetrics.Density);
         }
     }
 }

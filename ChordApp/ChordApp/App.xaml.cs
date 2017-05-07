@@ -7,8 +7,10 @@ using Xamarin.Forms;
 
 namespace ChordApp
 {
+    
     public partial class App : Application
     {
+        public static int ScreenWid = 0, ScreenHt = 0;
         public App()
         {
             InitializeComponent();
