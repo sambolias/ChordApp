@@ -11,8 +11,10 @@ namespace ChordApp
     {
         private Picker menu;
         private static double ScreenWidth, ScreenHeight;
+        private static double transRt, transLt;
         private Label chord;
-        Image img;
+        Image neck;
+        Image fret;
 
         public MainPage()
         {
@@ -25,7 +27,8 @@ namespace ChordApp
             {
                 Children =
                 {
-                    img,
+                    neck,
+                    fret,
                     menu,
                     chord,
                   
@@ -42,38 +45,40 @@ namespace ChordApp
             ScreenWidth = width;
             ScreenHeight = height;
             menu = makeMenu();
+            chord.TranslationX = ScreenWidth / 2;
+
             double imgHt = 238;
+            double imgWd = 1172;
             double scale = ScreenHeight / imgHt;
-            double move = ScreenHeight / 3;
-            scale *= DependencyService.Get<IDisplaySize>().getDisplayPixelHeight()/ScreenHeight;
-            move = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight() / 3;
-        //    move = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight() / 3;
-        //  move *= DependencyService.Get<IDisplaySize>().getDisplayPixelHeight(ScreenHeight);
+            double move = ScreenHeight / 2.5;
+            transRt = -imgWd * scale / 3.3;
+            transLt = imgWd * scale / 2.9;
 
-            /*   if (Device.RuntimePlatform == "Android")
-               {
-                   if(ScreenHeight > ScreenWidth)
-                   {
-                       scale *= 2;
-                   }
-                   else scale *= 5;
-
-                   move = ScreenHeight / 2;
-               }*/
-            img.Scale = scale;
-            img.TranslationY = move;
-            
+            if (Device.RuntimePlatform == "Android")
+            {
+                var aht = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight();
+                var adens = DependencyService.Get<IDisplaySize>().getPixelDensity();
+                scale = (aht / adens) / (imgHt / adens);
+                move = aht / adens / 2.0;
+            }
+            neck.Scale = scale;
+            neck.TranslationY = move;
+            fret.Scale = .5;
+           
         }
 
         private void InitPage()
         {
            
-            img = new Image
+            neck = new Image
             {
                 Source = ImageSource.FromResource("ChordApp.Assets.neck.jpg"),
             };
-           
-           
+
+            fret = new Image
+            {
+                Source = ImageSource.FromResource("ChordApp.Assets.fret.png"),
+            };
 
 
             chord = new Label
@@ -102,9 +107,13 @@ namespace ChordApp
             menu.Items.Add("C#");
             menu.Items.Add("D");
 
-            menu.SelectedIndexChanged += (object sender, EventArgs args) =>
+            menu.SelectedIndexChanged += async (object sender, EventArgs args) =>
               {
                   chord.Text = menu.SelectedItem.ToString();
+                  if (chord.Text == "C#")
+                      await neck.TranslateTo(transLt, neck.TranslationY);
+                  if (chord.Text == "D")
+                      await neck.TranslateTo(transRt, neck.TranslationY);
               };
           
             return menu;

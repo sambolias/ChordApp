@@ -17,6 +17,11 @@ namespace ChordApp.Droid
             return  MainActivity.HeightDp;
         }
 
+        public double getPixelDensity()
+        {
+            return MainActivity.pxDensity;
+        }
+
     }
 
 

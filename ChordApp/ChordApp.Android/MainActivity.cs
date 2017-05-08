@@ -9,10 +9,11 @@ using Android.OS;
 
 namespace ChordApp.Droid
 {
-    [Activity(Label = "ChordApp", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "ChordApp", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ScreenOrientation = ScreenOrientation.Landscape, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         public static int WidthDp, HeightDp;
+        public static double pxDensity;
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -23,7 +24,7 @@ namespace ChordApp.Droid
             var metrics = Resources.DisplayMetrics;
             WidthDp = convertPxToDp(metrics.WidthPixels);
             HeightDp = convertPxToDp(metrics.HeightPixels);
-            
+            pxDensity = Resources.DisplayMetrics.Density;
             //for touch, play with later
             /*GestureDetector.IOnGestureListener listener;
             MotionEvent e1;

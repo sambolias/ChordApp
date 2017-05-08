@@ -10,5 +10,6 @@ namespace ChordApp
     {
         int getDisplayPixelWidth();
         int getDisplayPixelHeight();
+        double getPixelDensity();
     }
 }
