@@ -17,11 +17,17 @@ namespace ChordApp.UWP
 {
     public sealed partial class MainPage
     {
+        public static double ScreenWidth, ScreenHeight;
+
         public MainPage()
         {
             this.InitializeComponent();
 
             LoadApplication(new ChordApp.App());
+
+            ScreenWidth = Window.Current.Bounds.Width;
+            ScreenHeight = Window.Current.Bounds.Height;
+            
         }
     }
 }

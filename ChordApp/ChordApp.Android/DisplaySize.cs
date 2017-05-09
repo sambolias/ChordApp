@@ -1,6 +1,5 @@
 ﻿using Xamarin.Forms;
 using ChordApp.Droid;
-using Android.Content.Res;
 
 [assembly: Dependency(typeof(DisplaySize))]
 namespace ChordApp.Droid

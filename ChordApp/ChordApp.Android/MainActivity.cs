@@ -14,6 +14,7 @@ namespace ChordApp.Droid
     {
         public static int WidthDp, HeightDp;
         public static double pxDensity;
+
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -22,25 +23,13 @@ namespace ChordApp.Droid
             base.OnCreate(bundle);
 
             var metrics = Resources.DisplayMetrics;
-            WidthDp = convertPxToDp(metrics.WidthPixels);
-            HeightDp = convertPxToDp(metrics.HeightPixels);
-            pxDensity = Resources.DisplayMetrics.Density;
-            //for touch, play with later
-            /*GestureDetector.IOnGestureListener listener;
-            MotionEvent e1;
-            e1.Action = MotionEventActions.Scroll;
-            
-            listener.OnScroll(e1, e1, 2, 3);
-            GestureDetector touch = new GestureDetector(listener);*/
+            WidthDp = metrics.WidthPixels;
+            HeightDp = metrics.HeightPixels;
+            pxDensity = Resources.DisplayMetrics.Density;          
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
-        }
-
-        private int convertPxToDp(float pixelVal)
-        {
-            return (int)(pixelVal);///Resources.DisplayMetrics.Density);
-        }
+        }      
     }
 }
 

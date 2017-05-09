@@ -16,6 +16,7 @@ namespace ChordApp
             InitializeComponent();
 
             MainPage = new ChordApp.MainPage();
+            
         }
 
         protected override void OnStart()

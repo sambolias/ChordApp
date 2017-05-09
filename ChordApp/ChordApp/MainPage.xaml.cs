@@ -13,29 +13,32 @@ namespace ChordApp
         private static double ScreenWidth, ScreenHeight;
         private static double transRt, transLt;
         private Label chord;
-        Image neck;
-        Sprite fret;
+        private Image git;
+        private Sprite fret;
+        private Fretboard neck;
+       
 
         public MainPage()
         {
             Title = "Chord View";
-            InitPage();
-
             
+            InitializeComponent();
+            InitPage();
+           
+            neck = new Fretboard(10,10);
+         //   git = neck.neck;
 
             Content = new AbsoluteLayout
             {
                 Children =
                 {
-                    neck,
-                    fret,
+                    neck.neck,                   
                     menu,
-                    chord,
-                  
+                    chord,                  
                 }
             };
-
-            InitializeComponent();
+            
+            
         
         }
 
@@ -44,10 +47,21 @@ namespace ChordApp
             base.OnSizeAllocated(width, height);
             ScreenWidth = width;
             ScreenHeight = height;
+
+        /*    Device.BeginInvokeOnMainThread(() =>
+            {
+                neck = new Fretboard(ScreenWidth, ScreenHeight);
+                git = neck.neck;
+            });
+            UpdateChildrenLayout();*/
+         //   chord.Text = "This shit is happening"+ Convert.ToString(ScreenWidth);
+            
+           
+
             menu = makeMenu();
             chord.TranslationX = ScreenWidth / 2;
 
-            double imgHt = 238;
+         /*   double imgHt = 238;
             double imgWd = 1172;
             double scale = ScreenHeight / imgHt;
             double move = ScreenHeight / 2 - imgHt/2;
@@ -63,9 +77,9 @@ namespace ChordApp
                 scale = (aht / adens) / (imgHt / adens);
                 move = aht / adens / 2.0;
             }
-            neck.Scale = scale;
-            neck.TranslationY = move;
-            
+            git.Scale = scale;
+            git.TranslationY = move;
+            */
         //    fret.scaleToScreenHeight(ScreenHeight,10);
            
         }
@@ -73,7 +87,7 @@ namespace ChordApp
         private void InitPage()
         {
            
-            neck = new Image
+            git = new Image
             {
                 Source = ImageSource.FromResource("ChordApp.Assets.neck.jpg"),
             };
@@ -111,9 +125,9 @@ namespace ChordApp
               {
                   chord.Text = menu.SelectedItem.ToString();
                   if (chord.Text == "C#")
-                      await neck.TranslateTo(transLt, neck.TranslationY);
+                      await git.TranslateTo(transLt, git.TranslationY);
                   if (chord.Text == "D")
-                      await neck.TranslateTo(transRt, neck.TranslationY);
+                      await git.TranslateTo(transRt, git.TranslationY);
               };
           
             return menu;
