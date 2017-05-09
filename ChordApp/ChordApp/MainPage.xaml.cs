@@ -14,14 +14,14 @@ namespace ChordApp
         private static double transRt, transLt;
         private Label chord;
         Image neck;
-        Image fret;
+        Sprite fret;
 
         public MainPage()
         {
             Title = "Chord View";
             InitPage();
 
-          
+            
 
             Content = new AbsoluteLayout
             {
@@ -50,10 +50,12 @@ namespace ChordApp
             double imgHt = 238;
             double imgWd = 1172;
             double scale = ScreenHeight / imgHt;
-            double move = ScreenHeight / 2.5;
-            transRt = -imgWd * scale / 3.3;
-            transLt = imgWd * scale / 2.9;
-
+            double move = ScreenHeight / 2 - imgHt/2;
+            //   transRt = -imgWd * scale / 3.3;
+            //  transLt = imgWd * scale / 2.9;
+            transRt = -imgWd  / 2 - ScreenWidth/2;
+            transLt = imgWd / 2 + ScreenWidth/2;
+            
             if (Device.RuntimePlatform == "Android")
             {
                 var aht = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight();
@@ -63,7 +65,8 @@ namespace ChordApp
             }
             neck.Scale = scale;
             neck.TranslationY = move;
-            fret.Scale = .5;
+            
+        //    fret.scaleToScreenHeight(ScreenHeight,10);
            
         }
 
@@ -75,10 +78,7 @@ namespace ChordApp
                 Source = ImageSource.FromResource("ChordApp.Assets.neck.jpg"),
             };
 
-            fret = new Image
-            {
-                Source = ImageSource.FromResource("ChordApp.Assets.fret.png"),
-            };
+            fret = new Sprite("ChordApp.Assets.fret.png");
 
 
             chord = new Label
