@@ -16,17 +16,7 @@ namespace ChordApp
         private double fretWidth = 200, fretHeight = 200;
         public Image neck;
         public List<Image> frets;
-
-        public Fretboard(double screenwidth, double screenheight)
-        {
-            ScreenWidth = screenwidth;
-            ScreenHeight = screenheight;
-
-            AdjustDisplayforDevice();
-
-            InitImages();
-        }
-
+     
         public Fretboard()
         {           
             ScreenWidth = 500;
@@ -46,6 +36,26 @@ namespace ChordApp
             AdjustImagesforDisplay();
         }
    
+        //private void loadChord(Chord chord)
+
+        public double XatFret(int fretNum)
+        {
+            int numberOfFrets = 14;
+            double XatFirst = 0;
+            double XatLast = neckWidth;
+            //dummy
+            //need to work out math just a bit better...close though
+            //fret length should decrease depending on 12 frets per octave
+            //return Math.Sqrt((XatLast - XatFirst) / (numberOfFrets - fretNum));
+            return -((XatLast * neck.Scale - XatFirst * neck.Scale) / Math.Sqrt(numberOfFrets)) * Math.Sqrt(fretNum) + (neckWidth * neck.Scale / 2.0)+ScreenWidth/2.0;
+        }
+
+        private double YatString(int stringNum)
+        {
+            //dummy
+            return 1;
+        }
+
         private double scaleToScreenHeight(double imgHeight, int percent)
         {
             double scale = ScreenHeight * PixelDensity / imgHeight;

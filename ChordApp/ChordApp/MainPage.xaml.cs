@@ -57,9 +57,10 @@ namespace ChordApp
       
             menu = makeMenu();
             chord.TranslationX = ScreenWidth / 2;
-         
+
+           // chord.Text = Convert.ToString(neck.neck.TranslationX);
             transRt = -1170  / 2 - ScreenWidth/2;
-            transLt = 280 / 2 + ScreenWidth/2;                     
+            transLt = 1170 / 2 + ScreenWidth/2;                     
            
         }       
 
@@ -84,15 +85,17 @@ namespace ChordApp
 
                   if (chord.Text == "C#")
                   {
-                      await neck.neck.TranslateTo(transLt, neck.neck.TranslationY);
+                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(9), neck.neck.TranslationY);
                       neck.frets[0].IsVisible = true;
-                      neck.frets[0].TranslationX = transLt + 50;
-                      neck.frets[0].TranslationY = neck.neck.TranslationY + 50;
+                      neck.frets[0].TranslationX = neck.XatFret(5);
+                      neck.frets[0].TranslationY = neck.neck.TranslationY;
                   }
                   else neck.frets[0].IsVisible = false;
 
+
                   if (chord.Text == "D")
-                      await neck.neck.TranslateTo(transRt, neck.neck.TranslationY);
+                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(14), neck.neck.TranslationY);
+               //   await neck.neck.TranslateTo(transRt, neck.neck.TranslationY);
               };
           
             return menu;
