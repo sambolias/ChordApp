@@ -12,34 +12,39 @@ namespace ChordApp
         private Picker menu;
         private static double ScreenWidth, ScreenHeight;
         private static double transRt, transLt;
-        private Label chord;
-        private Image git;
-        private Sprite fret;
+        private Label chord;  
         private Fretboard neck;
        
-
         public MainPage()
         {
             Title = "Chord View";
             
             InitializeComponent();
-            InitPage();
-           
-            neck = new Fretboard(10,10);
-         //   git = neck.neck;
+
+            menu = makeMenu();
+
+            //this will be part of Fretboard probably
+            chord = new Label
+            {
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+            };//
+
+            neck = new Fretboard();
 
             Content = new AbsoluteLayout
             {
                 Children =
                 {
-                    neck.neck,                   
+                    neck.neck,    
+                    neck.frets[0],
+                    neck.frets[1],
+                    neck.frets[2],
                     menu,
                     chord,                  
                 }
-            };
-            
-            
-        
+            };                               
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -48,63 +53,15 @@ namespace ChordApp
             ScreenWidth = width;
             ScreenHeight = height;
 
-        /*    Device.BeginInvokeOnMainThread(() =>
-            {
-                neck = new Fretboard(ScreenWidth, ScreenHeight);
-                git = neck.neck;
-            });
-            UpdateChildrenLayout();*/
-         //   chord.Text = "This shit is happening"+ Convert.ToString(ScreenWidth);
-            
-           
-
+            neck.updateDisplaySize(ScreenWidth, ScreenHeight);
+      
             menu = makeMenu();
             chord.TranslationX = ScreenWidth / 2;
-
-         /*   double imgHt = 238;
-            double imgWd = 1172;
-            double scale = ScreenHeight / imgHt;
-            double move = ScreenHeight / 2 - imgHt/2;
-            //   transRt = -imgWd * scale / 3.3;
-            //  transLt = imgWd * scale / 2.9;
-            transRt = -imgWd  / 2 - ScreenWidth/2;
-            transLt = imgWd / 2 + ScreenWidth/2;
-            
-            if (Device.RuntimePlatform == "Android")
-            {
-                var aht = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight();
-                var adens = DependencyService.Get<IDisplaySize>().getPixelDensity();
-                scale = (aht / adens) / (imgHt / adens);
-                move = aht / adens / 2.0;
-            }
-            git.Scale = scale;
-            git.TranslationY = move;
-            */
-        //    fret.scaleToScreenHeight(ScreenHeight,10);
+         
+            transRt = -1170  / 2 - ScreenWidth/2;
+            transLt = 280 / 2 + ScreenWidth/2;                     
            
-        }
-
-        private void InitPage()
-        {
-           
-            git = new Image
-            {
-                Source = ImageSource.FromResource("ChordApp.Assets.neck.jpg"),
-            };
-
-            fret = new Sprite("ChordApp.Assets.fret.png");
-
-
-            chord = new Label
-            {               
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-            };
-
-            menu = makeMenu();
-           
-        }
+        }       
 
         private Picker makeMenu()
         {
@@ -124,10 +81,18 @@ namespace ChordApp
             menu.SelectedIndexChanged += async (object sender, EventArgs args) =>
               {
                   chord.Text = menu.SelectedItem.ToString();
+
                   if (chord.Text == "C#")
-                      await git.TranslateTo(transLt, git.TranslationY);
+                  {
+                      await neck.neck.TranslateTo(transLt, neck.neck.TranslationY);
+                      neck.frets[0].IsVisible = true;
+                      neck.frets[0].TranslationX = transLt + 50;
+                      neck.frets[0].TranslationY = neck.neck.TranslationY + 50;
+                  }
+                  else neck.frets[0].IsVisible = false;
+
                   if (chord.Text == "D")
-                      await git.TranslateTo(transRt, git.TranslationY);
+                      await neck.neck.TranslateTo(transRt, neck.neck.TranslationY);
               };
           
             return menu;

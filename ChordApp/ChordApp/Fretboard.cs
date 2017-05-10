@@ -27,16 +27,35 @@ namespace ChordApp
             InitImages();
         }
 
+        public Fretboard()
+        {           
+            ScreenWidth = 500;
+            ScreenHeight = 500;
+
+            AdjustDisplayforDevice();
+
+            InitImages();
+        }
+
+        public void updateDisplaySize(double screenwidth, double screenheight)
+        {
+            ScreenWidth = screenwidth;
+            ScreenHeight = screenheight;
+
+            AdjustDisplayforDevice();
+            AdjustImagesforDisplay();
+        }
+   
         private double scaleToScreenHeight(double imgHeight, int percent)
         {
-            double scale = (ScreenHeight / PixelDensity) / (imgHeight / PixelDensity);
+            double scale = ScreenHeight * PixelDensity / imgHeight;
             scale *= (double)percent / 100;
             return scale;
         }
 
         private double scaleToScreenWidth(double imgWidth, int percent)
         {
-            double scale = (ScreenWidth / PixelDensity) / (imgWidth / PixelDensity);
+            double scale = ScreenWidth * PixelDensity / imgWidth;
             scale *= (double)percent / 100;
             return scale;
         }
@@ -45,12 +64,10 @@ namespace ChordApp
         {
             neck = new Image();
             neck.Source = ImageSource.FromResource("ChordApp.Assets.neck.jpg");
-            neck.Scale = scaleToScreenHeight(neckHeight, 100);
-            neck.TranslationY = ScreenHeight / 2 - neckHeight / 2;
-
+           
             frets = new List<Image>();
             var fretSource = ImageSource.FromResource("ChordApp.Assets.fret.png");
-            var fretScale = scaleToScreenHeight(fretHeight, 10);
+          
             for(int i = 0; i < 3; i++)
             {
                 frets.Add(new Image());
@@ -58,8 +75,21 @@ namespace ChordApp
             foreach (var fret in frets)
             {
                 fret.Source = fretSource;
-                fret.Scale = fretScale;
                 fret.IsVisible = false;
+            }
+
+            AdjustImagesforDisplay();
+        }
+
+        private void AdjustImagesforDisplay()
+        {
+            neck.Scale = scaleToScreenHeight(neckHeight, 100);
+            neck.TranslationY = ScreenHeight / 2 - neckHeight / PixelDensity / 2;
+
+            var fretScale = scaleToScreenHeight(fretHeight, 10);
+            foreach (var fret in frets)
+            {              
+                fret.Scale = fretScale;
             }
         }
 
@@ -74,15 +104,15 @@ namespace ChordApp
                     break;
                 case "Android":
                     PixelDensity = DependencyService.Get<IDisplaySize>().getPixelDensity();
-                    ScreenWidth = PixelDensity * DependencyService.Get<IDisplaySize>().getDisplayPixelWidth();
-                    ScreenHeight = PixelDensity * DependencyService.Get<IDisplaySize>().getDisplayPixelHeight();
+                    ScreenWidth = DependencyService.Get<IDisplaySize>().getDisplayPixelWidth() / PixelDensity;
+                    ScreenHeight = DependencyService.Get<IDisplaySize>().getDisplayPixelHeight() / PixelDensity;
                     break;
                 default:
                     break;
             }
-
-            neckWidth *= PixelDensity;  neckHeight *= PixelDensity;
-            fretWidth *= PixelDensity;  fretHeight *= PixelDensity;
-    }
+        //theres still an inconsistancy in the displays
+        //    neckWidth /= PixelDensity;  neckHeight /= PixelDensity;
+        //    fretWidth /= PixelDensity;  fretHeight /= PixelDensity;
+        }
     }
 }
