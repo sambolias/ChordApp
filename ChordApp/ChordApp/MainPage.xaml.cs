@@ -74,8 +74,9 @@ namespace ChordApp
                 Title = "Chords",
                 HorizontalOptions=LayoutOptions.CenterAndExpand,               
                 Margin =new Thickness(10),                
-            };            
+            };
 
+            menu.Items.Add("C");
             menu.Items.Add("C#");
             menu.Items.Add("D");
 
@@ -83,9 +84,18 @@ namespace ChordApp
               {
                   chord.Text = menu.SelectedItem.ToString();
 
+                  List<Fret> test = new List<Fret>();
+                  test.Add(new Fret(1, 4));
+                  test.Add(new Fret(1, 5));
+                  test.Add(new Fret(1, 6));
+                  Chord testChord = new Chord("C", test);
+
+                  if (chord.Text == "C")
+                      neck.loadChord(testChord);
+
                   if (chord.Text == "C#")
                   {
-                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(1), neck.neck.TranslationY);
+                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(0), neck.neck.TranslationY);
                       neck.frets[0].IsVisible = true;
                       neck.frets[0].TranslationX = neck.XatFret(4);
                       neck.frets[0].TranslationY = neck.neck.TranslationY;

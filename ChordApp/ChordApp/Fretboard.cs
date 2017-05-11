@@ -36,24 +36,42 @@ namespace ChordApp
             AdjustImagesforDisplay();
         }
    
-        //private void loadChord(Chord chord)
+        public async void loadChord(Chord chord)
+        {
+            int leftFret = chord.getLeftmostFret()-1;
+            double ScaleLength = (neckWidth - 173.0) / PixelDensity * 2.0 * neck.Scale; //in 2 places...
 
+            hideFrets();
+
+            await neck.TranslateTo(XatFret(leftFret), neck.TranslationY);
+
+            int i = 0;
+            double fretOffset;
+            double midFret;
+            foreach(var fret in chord.frets)
+            {
+                midFret = nutToFret(fret.fretNum-1, ScaleLength) - nutToFret(fret.fretNum-2, ScaleLength);
+                fretOffset = nutToFret(fret.fretNum-1, ScaleLength) - nutToFret(leftFret, ScaleLength);
+                fretOffset += midFret / 2.0;
+                this.frets[i].IsVisible=true;
+                this.frets[i].TranslationX = fretOffset+fretWidth*frets[i].Scale/2.0;
+                this.frets[i].TranslationY = YatString(fret.stringNum);
+               
+                i++;
+            }
+
+        }
+
+        //fret inlay at top of designated fret should be at left side of screen
         public double XatFret(int fretNum)
         {
-            /* int numberOfFrets = 14;
-             double XatFirst = 0;
-             double XatLast = neckWidth;
-             //dummy
-             //need to work out math just a bit better...close though
-             //fret length should decrease depending on 12 frets per octave
-             //return Math.Sqrt((XatLast - XatFirst) / (numberOfFrets - fretNum));
-             return -((XatLast * neck.Scale - XatFirst * neck.Scale) / Math.Sqrt(numberOfFrets)) * Math.Sqrt(fretNum) + (neckWidth * neck.Scale / 2.0)+ScreenWidth/2.0;
-             */
-            double XatNut = neckWidth*neck.Scale / 2.0 - ScreenWidth/3.3;
-            //scale length is double the pixels at the 12th fret
-            double ScaleLength = (neckWidth-180.0)*2.0;
+                                                                                // V /4.5 on Android --figure out
+            double XatNut = neckWidth / PixelDensity * neck.Scale / 2.0 - ScreenWidth/3.3;
+            //scale length is double the length to the 12th fret
+            //http://www.liutaiomottola.com/formulae/fret.htm
+            double ScaleLength = (neckWidth - 173.0) / PixelDensity * 2.0 * neck.Scale;
 
-            return XatNut - nutToFret(fretNum, ScaleLength)*neck.Scale;
+            return XatNut - nutToFret(fretNum, ScaleLength);
         }
 
         private double nutToFret(int fret, double scaleLength)
@@ -63,7 +81,7 @@ namespace ChordApp
             double bridgeToFret;
             
             //once this works solve as nonrecursive
-            for(int i = fret; i >0; i--)
+            for(int i = fret; i > 0; i--)
             {
                 bridgeToFret = scaleLength - NutToFret;
                 NutToFret = bridgeToFret / fretConst + NutToFret;
@@ -81,15 +99,23 @@ namespace ChordApp
         private double scaleToScreenHeight(double imgHeight, int percent)
         {
             double scale = ScreenHeight * PixelDensity / imgHeight;
-            scale *= (double)percent / 100;
+            scale *= (double)percent / 100.0;
             return scale;
         }
 
         private double scaleToScreenWidth(double imgWidth, int percent)
         {
             double scale = ScreenWidth * PixelDensity / imgWidth;
-            scale *= (double)percent / 100;
+            scale *= (double)percent / 100.0;
             return scale;
+        }
+
+        private void hideFrets()
+        {
+            foreach(var fret in frets)
+            {
+                fret.IsVisible = false;
+            }
         }
 
         private void InitImages()
@@ -100,7 +126,7 @@ namespace ChordApp
             frets = new List<Image>();
             var fretSource = ImageSource.FromResource("ChordApp.Assets.fret.png");
           
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 4; i++)
             {
                 frets.Add(new Image());
             }
