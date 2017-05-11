@@ -85,16 +85,16 @@ namespace ChordApp
 
                   if (chord.Text == "C#")
                   {
-                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(9), neck.neck.TranslationY);
+                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(1), neck.neck.TranslationY);
                       neck.frets[0].IsVisible = true;
-                      neck.frets[0].TranslationX = neck.XatFret(5);
+                      neck.frets[0].TranslationX = neck.XatFret(4);
                       neck.frets[0].TranslationY = neck.neck.TranslationY;
                   }
                   else neck.frets[0].IsVisible = false;
 
 
                   if (chord.Text == "D")
-                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(14), neck.neck.TranslationY);
+                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(12), neck.neck.TranslationY);
                //   await neck.neck.TranslateTo(transRt, neck.neck.TranslationY);
               };
           

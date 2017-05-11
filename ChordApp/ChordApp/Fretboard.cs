@@ -40,14 +40,36 @@ namespace ChordApp
 
         public double XatFret(int fretNum)
         {
-            int numberOfFrets = 14;
-            double XatFirst = 0;
-            double XatLast = neckWidth;
-            //dummy
-            //need to work out math just a bit better...close though
-            //fret length should decrease depending on 12 frets per octave
-            //return Math.Sqrt((XatLast - XatFirst) / (numberOfFrets - fretNum));
-            return -((XatLast * neck.Scale - XatFirst * neck.Scale) / Math.Sqrt(numberOfFrets)) * Math.Sqrt(fretNum) + (neckWidth * neck.Scale / 2.0)+ScreenWidth/2.0;
+            /* int numberOfFrets = 14;
+             double XatFirst = 0;
+             double XatLast = neckWidth;
+             //dummy
+             //need to work out math just a bit better...close though
+             //fret length should decrease depending on 12 frets per octave
+             //return Math.Sqrt((XatLast - XatFirst) / (numberOfFrets - fretNum));
+             return -((XatLast * neck.Scale - XatFirst * neck.Scale) / Math.Sqrt(numberOfFrets)) * Math.Sqrt(fretNum) + (neckWidth * neck.Scale / 2.0)+ScreenWidth/2.0;
+             */
+            double XatNut = neckWidth*neck.Scale / 2.0 - ScreenWidth/3.3;
+            //scale length is double the pixels at the 12th fret
+            double ScaleLength = (neckWidth-180.0)*2.0;
+
+            return XatNut - nutToFret(fretNum, ScaleLength)*neck.Scale;
+        }
+
+        private double nutToFret(int fret, double scaleLength)
+        {
+            const double fretConst = 17.817;
+            double NutToFret=0;
+            double bridgeToFret;
+            
+            //once this works solve as nonrecursive
+            for(int i = fret; i >0; i--)
+            {
+                bridgeToFret = scaleLength - NutToFret;
+                NutToFret = bridgeToFret / fretConst + NutToFret;
+            }
+
+            return NutToFret;
         }
 
         private double YatString(int stringNum)
