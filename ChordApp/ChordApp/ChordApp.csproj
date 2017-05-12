@@ -39,6 +39,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Chord.cs" />
+    <Compile Include="ChordList.cs" />
     <Compile Include="Fretboard.cs" />
     <Compile Include="IDisplaySize.cs" />
     <Compile Include="MainPage.xaml.cs">

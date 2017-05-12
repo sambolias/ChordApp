@@ -66,7 +66,8 @@ namespace ChordApp
         public double XatFret(int fretNum)
         {
                                                                                 // V /4.5 on Android --figure out
-            double XatNut = neckWidth / PixelDensity * neck.Scale / 2.0 - ScreenWidth/3.3;
+                                                                                // V /3.3 on BigScreen
+            double XatNut = neckWidth / PixelDensity * neck.Scale / 2.0 - ScreenWidth/2.3;
             //scale length is double the length to the 12th fret
             //http://www.liutaiomottola.com/formulae/fret.htm
             double ScaleLength = (neckWidth - 173.0) / PixelDensity * 2.0 * neck.Scale;
@@ -93,7 +94,13 @@ namespace ChordApp
         private double YatString(int stringNum)
         {
             //dummy
-            return 1;
+            //theres definitely a more
+            //clever way to do this
+            List<int> stringY = new List<int>
+            {
+                21,43,68,94,120, 149
+            };
+            return stringY[stringNum-1]*neck.Scale;
         }
 
         private double scaleToScreenHeight(double imgHeight, int percent)

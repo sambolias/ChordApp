@@ -14,13 +14,14 @@ namespace ChordApp
         private static double transRt, transLt;
         private Label chord;  
         private Fretboard neck;
+        private ChordList chordList;
        
         public MainPage()
         {
             Title = "Chord View";
             
             InitializeComponent();
-
+            chordList = new ChordList();
             menu = makeMenu();
 
             //this will be part of Fretboard probably
@@ -76,35 +77,42 @@ namespace ChordApp
                 Margin =new Thickness(10),                
             };
 
-            menu.Items.Add("C");
+            /*menu.Items.Add("C");
             menu.Items.Add("C#");
-            menu.Items.Add("D");
+            menu.Items.Add("D");*/
 
-            menu.SelectedIndexChanged += async (object sender, EventArgs args) =>
+            foreach (var chord in chordList.chordList)
+            {
+                menu.Items.Add(chord.Key);
+            }
+
+            menu.SelectedIndexChanged += /*async*/ (object sender, EventArgs args) =>
               {
                   chord.Text = menu.SelectedItem.ToString();
 
-                  List<Fret> test = new List<Fret>();
-                  test.Add(new Fret(1, 4));
-                  test.Add(new Fret(1, 5));
-                  test.Add(new Fret(1, 6));
+                  neck.loadChord(chordList.chordList[chord.Text]);
+
+                 /* List<Fret> test = new List<Fret>();
+                  test.Add(new Fret(2, 4));
+                  test.Add(new Fret(3, 5));
+                  test.Add(new Fret(4, 6));
                   Chord testChord = new Chord("C", test);
 
                   if (chord.Text == "C")
                       neck.loadChord(testChord);
 
                   if (chord.Text == "C#")
-                  {
-                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(0), neck.neck.TranslationY);
-                      neck.frets[0].IsVisible = true;
+                  {*/
+                     // await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(0), neck.neck.TranslationY);
+                     /* neck.frets[0].IsVisible = true;
                       neck.frets[0].TranslationX = neck.XatFret(4);
                       neck.frets[0].TranslationY = neck.neck.TranslationY;
                   }
                   else neck.frets[0].IsVisible = false;
+                  
 
-
-                  if (chord.Text == "D")
-                      await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(12), neck.neck.TranslationY);
+                  if (chord.Text == "D")*/
+                    //  await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(12), neck.neck.TranslationY);
                //   await neck.neck.TranslateTo(transRt, neck.neck.TranslationY);
               };
           
