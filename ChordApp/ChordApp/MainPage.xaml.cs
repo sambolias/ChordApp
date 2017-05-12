@@ -10,13 +10,11 @@ namespace ChordApp
     public partial class MainPage : ContentPage
     {
         private Picker menu;
-        private static double ScreenWidth, ScreenHeight;
-        private static double transRt, transLt;
         private Label chord;
         private Label altChord;
         private Fretboard neck;
         private ChordList chordList;
-        private Button alts;
+        private Button altButton;
         private string lastChord="";
        
         public MainPage()
@@ -24,43 +22,8 @@ namespace ChordApp
             Title = "Chord View";
             
             InitializeComponent();
-            chordList = new ChordList();
-            menu = makeMenu();
 
-            //this will be part of Fretboard probably
-            chord = new Label
-            {
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-            };//
-
-            altChord = new Label
-            {
-                TranslationX = 900,
-                IsVisible = false,
-            };
-
-            neck = new Fretboard();
-
-            //make fn
-            alts = new Button
-            {
-                Text = "View Alternate Chord",
-                TranslationX = 1000,
-                IsVisible = false,
-            };
-            alts.Clicked += (object s, EventArgs a) =>
-            {
-                var c = chordList.showAlternate(chord.Text);
-                neck.loadChord(c);
-                altChord.Text = c.chord;
-                if (altChord.Text != chord.Text)
-                    altChord.IsVisible = true;
-                else
-                    altChord.IsVisible = false;
-            };//
-
+            initContent();
 
             Content = new AbsoluteLayout
             {
@@ -72,7 +35,7 @@ namespace ChordApp
                     neck.frets[2],
                     neck.frets[3],
                     menu,
-                    alts,
+                    altButton,
                     altChord,
                     chord,                  
                 }
@@ -82,19 +45,54 @@ namespace ChordApp
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            ScreenWidth = width;
-            ScreenHeight = height;
-
-            neck.updateDisplaySize(ScreenWidth, ScreenHeight);
+           
+            neck.updateDisplaySize(width, height);
       
             menu = makeMenu();
-            chord.TranslationX = ScreenWidth / 2;
-
-           // chord.Text = Convert.ToString(neck.neck.TranslationX);
-            transRt = -1170  / 2 - ScreenWidth/2;
-            transLt = 1170 / 2 + ScreenWidth/2;                     
+            chord.TranslationX = width / 1.5;
+            altChord.TranslationX = width / 1.5;
+            altChord.TranslationY = height / 15.0;
+            altButton.TranslationX = width / 4.0;
+            altButton.TranslationY = height / 20.0;
            
         }       
+
+        private void initContent()
+        {
+            chordList = new ChordList();
+            menu = makeMenu();
+            chord = new Label
+            {
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+            };
+            altChord = new Label
+            {
+                IsVisible = false,
+            };
+            neck = new Fretboard();
+            altButton = makeAltButton();
+        }
+
+        private Button makeAltButton()
+        {
+            var ret = new Button
+            {
+                Text = "View Alternate Chord",
+                IsVisible = false,
+            };
+            ret.Clicked += (object s, EventArgs a) =>
+            {
+                var chord = chordList.showAlternate(this.chord.Text);
+                neck.loadChord(chord);
+                altChord.Text = chord.chord;
+                if (altChord.Text != this.chord.Text)
+                    altChord.IsVisible = true;
+                else
+                    altChord.IsVisible = false;
+            };
+
+            return ret;
+        }
 
         private Picker makeMenu()
         {
@@ -103,57 +101,33 @@ namespace ChordApp
 
             Picker menu = new Picker
             {
-                Title = "Chords",
-                HorizontalOptions=LayoutOptions.CenterAndExpand,               
+                Title = "Chords",           
                 Margin =new Thickness(10),                
             };
 
-            /*menu.Items.Add("C");
-            menu.Items.Add("C#");
-            menu.Items.Add("D");*/
-
+          
             foreach (var chord in chordList.chordList)
             {
                 menu.Items.Add(chord.Key);
             }
 
-            menu.SelectedIndexChanged += /*async*/ (object sender, EventArgs args) =>
-              {
-                  
+            menu.SelectedIndexChanged += (object sender, EventArgs args) =>
+              {                  
                   chord.Text = menu.SelectedItem.ToString();
-                  altChord.IsVisible = false;
-
-                  if (lastChord != "")
-                      chordList.chordList[lastChord].reset();
-                  lastChord = chord.Text;
-
+                 
                   neck.loadChord(chordList.chordList[chord.Text]);
+
+                  //reset alternate button
+                  altChord.IsVisible = false;
+                  if (lastChord != "")
+                      chordList.chordList[lastChord].resetAlternate();
+
+                  lastChord = chord.Text;                
                   if (chordList.chordList[chord.Text].hasAlternates())
-                      alts.IsVisible = true;
+                      altButton.IsVisible = true;
                   else
-                      alts.IsVisible = false;
-                 /* List<Fret> test = new List<Fret>();
-                  test.Add(new Fret(2, 4));
-                  test.Add(new Fret(3, 5));
-                  test.Add(new Fret(4, 6));
-                  Chord testChord = new Chord("C", test);
-
-                  if (chord.Text == "C")
-                      neck.loadChord(testChord);
-
-                  if (chord.Text == "C#")
-                  {*/
-                     // await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(0), neck.neck.TranslationY);
-                     /* neck.frets[0].IsVisible = true;
-                      neck.frets[0].TranslationX = neck.XatFret(4);
-                      neck.frets[0].TranslationY = neck.neck.TranslationY;
-                  }
-                  else neck.frets[0].IsVisible = false;
-                  
-
-                  if (chord.Text == "D")*/
-                    //  await neck.neck.TranslateTo(/*(neck.XatFret(1)+neck.XatFret(3))/2.0*/neck.XatFret(12), neck.neck.TranslationY);
-               //   await neck.neck.TranslateTo(transRt, neck.neck.TranslationY);
+                      altButton.IsVisible = false;       
+                  //
               };
           
             return menu;

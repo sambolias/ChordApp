@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//todo use real chords
+//maybe input from file, down the line
+
 namespace ChordApp
 {
     class ChordList
@@ -21,7 +24,7 @@ namespace ChordApp
                 new Fret(5,3),
                 new Fret(4,3),
             };
-            chordList.Add("Power G", new Chord("Power G", fretList));
+            chordList.Add("Power F", new Chord("Power F", fretList));
 
             fretList = new List<Fret>
             {
@@ -29,7 +32,7 @@ namespace ChordApp
                 new Fret(5,5),
                 new Fret(4,5),
             };
-            chordList.Add("Power A", new Chord("Power A", fretList));
+            chordList.Add("Power G", new Chord("Power G", fretList));
 
             fretList = new List<Fret>
             {

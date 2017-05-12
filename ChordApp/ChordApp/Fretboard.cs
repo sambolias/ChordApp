@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
+//todo clean up constants in loadChord(),XatFret(), and YatString()
+//solve series in nutToFret()
+//figure out display inconsistencies
+
 namespace ChordApp
 {
     
@@ -50,9 +54,9 @@ namespace ChordApp
             double midFret;
             foreach(var fret in chord.frets)
             {
-                midFret = nutToFret(fret.fretNum-1, ScaleLength) - nutToFret(fret.fretNum-2, ScaleLength);
+                midFret = nutToFret(fret.fretNum, ScaleLength) - nutToFret(fret.fretNum-1, ScaleLength);
                 fretOffset = nutToFret(fret.fretNum-1, ScaleLength) - nutToFret(leftFret, ScaleLength);
-                fretOffset += midFret / 2.0;
+                fretOffset += midFret / 4.5;
                 this.frets[i].IsVisible=true;
                 this.frets[i].TranslationX = fretOffset+fretWidth*frets[i].Scale/2.0;
                 this.frets[i].TranslationY = YatString(fret.stringNum);
@@ -67,7 +71,8 @@ namespace ChordApp
         {
                                                                                 // V /4.5 on Android --figure out
                                                                                 // V /3.3 on BigScreen
-            double XatNut = neckWidth / PixelDensity * neck.Scale / 2.0 - ScreenWidth/2.3;
+                                                                                // V /2.3 on Laptop
+            double XatNut = neckWidth / PixelDensity * neck.Scale / 2.0 - ScreenWidth/4.5;
             //scale length is double the length to the 12th fret
             //http://www.liutaiomottola.com/formulae/fret.htm
             double ScaleLength = (neckWidth - 173.0) / PixelDensity * 2.0 * neck.Scale;
@@ -98,9 +103,9 @@ namespace ChordApp
             //clever way to do this
             List<int> stringY = new List<int>
             {
-                21,43,68,94,120, 149
+                21,45,68,94,120, 149
             };
-            return stringY[stringNum-1]*neck.Scale;
+            return stringY[stringNum - 1] * neck.Scale / PixelDensity;
         }
 
         private double scaleToScreenHeight(double imgHeight, int percent)

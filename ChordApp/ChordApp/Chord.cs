@@ -11,9 +11,7 @@ namespace ChordApp
         public List<Fret> frets;
         public string chord;
         public List<Chord> alternates = new List<Chord>();
-        private int next=0; //needs to be a way to reset this when chord is deselected
-        private bool IsAlternate = false;
-        
+        private int next = 0;         
 
         public Chord(string name, List<Fret> fretList )
         {
@@ -26,9 +24,7 @@ namespace ChordApp
             if (!hasAlternates())
                 alternates.Add(this);
 
-            chord.IsAlternate = true;
-            alternates.Add(chord);
-            
+            alternates.Add(chord);            
         }
 
         public int getCurrentAlternate()
@@ -45,14 +41,9 @@ namespace ChordApp
             return next;
         }
 
-        public void reset()
+        public void resetAlternate()
         {
             next = 0;
-        }
-
-        public bool isAlternate()
-        {
-            return IsAlternate;
         }
 
         public bool hasAlternates()
@@ -83,33 +74,7 @@ namespace ChordApp
                 if (fret > ret)
                     ret = fret;
             }
-
             return ret.fretNum;
         }
-
-
-    }
-
-    struct Fret
-    {
-        public int stringNum { get; set; }
-        public int fretNum { get; set; }
-
-        public Fret(int stringnum, int fretnum)
-        {
-            stringNum = stringnum;
-            fretNum = fretnum;
-        }
-
-        public static bool operator <(Fret lhs, Fret rhs)
-        {
-            return lhs.fretNum < rhs.fretNum;
-        }
-        public static bool operator >(Fret lhs, Fret rhs)
-        {
-            return lhs.fretNum > rhs.fretNum;
-        }
-
-
     }
 }
