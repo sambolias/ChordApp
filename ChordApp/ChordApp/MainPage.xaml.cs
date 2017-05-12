@@ -12,9 +12,12 @@ namespace ChordApp
         private Picker menu;
         private static double ScreenWidth, ScreenHeight;
         private static double transRt, transLt;
-        private Label chord;  
+        private Label chord;
+        private Label altChord;
         private Fretboard neck;
         private ChordList chordList;
+        private Button alts;
+        private string lastChord="";
        
         public MainPage()
         {
@@ -32,7 +35,32 @@ namespace ChordApp
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
             };//
 
+            altChord = new Label
+            {
+                TranslationX = 900,
+                IsVisible = false,
+            };
+
             neck = new Fretboard();
+
+            //make fn
+            alts = new Button
+            {
+                Text = "View Alternate Chord",
+                TranslationX = 1000,
+                IsVisible = false,
+            };
+            alts.Clicked += (object s, EventArgs a) =>
+            {
+                var c = chordList.showAlternate(chord.Text);
+                neck.loadChord(c);
+                altChord.Text = c.chord;
+                if (altChord.Text != chord.Text)
+                    altChord.IsVisible = true;
+                else
+                    altChord.IsVisible = false;
+            };//
+
 
             Content = new AbsoluteLayout
             {
@@ -43,6 +71,8 @@ namespace ChordApp
                     neck.frets[1],
                     neck.frets[2],
                     menu,
+                    alts,
+                    altChord,
                     chord,                  
                 }
             };                               
@@ -88,10 +118,19 @@ namespace ChordApp
 
             menu.SelectedIndexChanged += /*async*/ (object sender, EventArgs args) =>
               {
+                  
                   chord.Text = menu.SelectedItem.ToString();
+                  altChord.IsVisible = false;
+
+                  if (lastChord != "")
+                      chordList.chordList[lastChord].reset();
+                  lastChord = chord.Text;
 
                   neck.loadChord(chordList.chordList[chord.Text]);
-
+                  if (chordList.chordList[chord.Text].hasAlternates())
+                      alts.IsVisible = true;
+                  else
+                      alts.IsVisible = false;
                  /* List<Fret> test = new List<Fret>();
                   test.Add(new Fret(2, 4));
                   test.Add(new Fret(3, 5));

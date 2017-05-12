@@ -10,11 +10,57 @@ namespace ChordApp
     {
         public List<Fret> frets;
         public string chord;
+        public List<Chord> alternates = new List<Chord>();
+        private int next=0; //needs to be a way to reset this when chord is deselected
+        private bool IsAlternate = false;
+        
 
         public Chord(string name, List<Fret> fretList )
         {
             frets = fretList;
             chord = name;
+        }
+
+        public void addAlternate(Chord chord)
+        {
+            if (!hasAlternates())
+                alternates.Add(this);
+
+            chord.IsAlternate = true;
+            alternates.Add(chord);
+            
+        }
+
+        public int getCurrentAlternate()
+        {
+            return next;
+        }
+
+        public int getNextAlternate()
+        {
+            next++;
+            if (next >= alternates.Count)
+                next = 0;
+
+            return next;
+        }
+
+        public void reset()
+        {
+            next = 0;
+        }
+
+        public bool isAlternate()
+        {
+            return IsAlternate;
+        }
+
+        public bool hasAlternates()
+        {
+            if (alternates.Count > 0)
+                return true;
+            else
+                return false;
         }
 
         public int getLeftmostFret()
