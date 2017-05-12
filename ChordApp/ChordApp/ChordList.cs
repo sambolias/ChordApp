@@ -64,7 +64,15 @@ namespace ChordApp
                 new Fret(4,2),
                 new Fret(3,5),
             };
-            altChord.addAlternate(new Chord("Made up alternate", fretList));
+            altChord.addAlternate(new Chord("Made up alternate", fretList));          
+            fretList = new List<Fret>
+            {
+                new Fret(6,2),
+                new Fret(5,2),
+                new Fret(4,1),
+                new Fret(3,3),
+            };
+            altChord.addAlternate(new Chord("other fake alternate", fretList));
             chordList.Add("Made up Chord", altChord);
 
 

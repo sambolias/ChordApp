@@ -70,6 +70,7 @@ namespace ChordApp
                     neck.frets[0],
                     neck.frets[1],
                     neck.frets[2],
+                    neck.frets[3],
                     menu,
                     alts,
                     altChord,
